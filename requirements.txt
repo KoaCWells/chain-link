@@ -1,1 +1,3 @@
 discord
+pydantic
+pydantic_settings
