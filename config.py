@@ -15,40 +15,45 @@ class Settings(BaseSettings):
   EMAIL_PASSWORD: str = ''
 
   class Config:
+    """
+    Required class by pydantic for loading the .config file
+    """
     env_file = Path("./.config").resolve()
 
-    @field_validator("DISCORD_TOKEN")
-    @classmethod
-    def check_discord_token(cls, value: str) -> str:
-      """
-      Checks to see if the DISCORD_TOKEN environment variable is set.
-      :param value: value of DISCORD_TOKEN
-      :return: str
-      """
-      if not value:
-        raise ValueError("DISCORD_TOKEN must be set")
-      return value
+  @field_validator("DISCORD_TOKEN")
+  @classmethod
+  def check_discord_token(cls, value: str) -> str:
+    """
+    Checks to see if the DISCORD_TOKEN environment variable is set.
+    :param value: value of DISCORD_TOKEN
+    :return: str
+    """
+    if not value:
+      raise ValueError("DISCORD_TOKEN must be set")
+    return value
 
-    @field_validator("EMAIL")
-    @classmethod
-    def check_email(cls, value: str) -> str:
-      """
-      Checks to see if the EMAIL environment variable is set.
-      :param value: value of EMAIL
-      :return: str
-      """
-      if not value:
-        raise ValueError("EMAIL must be set")
-      return value
+  @field_validator("EMAIL")
+  @classmethod
+  def check_email(cls, value: str) -> str:
+    """
+    Checks to see if the EMAIL environment variable is set.
+    :param value: value of EMAIL
+    :return: str
+    """
+    if not value:
+      raise ValueError("EMAIL must be set")
+    return value
 
-    @field_validator("EMAIL_PASSWORD")
-    @classmethod
-    def check_email_password(cls, value: str) -> str:
-      """
-      Checks to see if the EMAIL_PASSWORD environment variable is set.
-      :param value: value of EMAIL_PASSWORD
-      :return: str
-      """
-      if not value:
-        raise ValueError("EMAIL_PASSWORD must be set")
-      return value
+  @field_validator("EMAIL_PASSWORD")
+  @classmethod
+  def check_email_password(cls, value: str) -> str:
+    """
+    Checks to see if the EMAIL_PASSWORD environment variable is set.
+    :param value: value of EMAIL_PASSWORD
+    :return: str
+    """
+    if not value:
+      raise ValueError("EMAIL_PASSWORD must be set")
+    return value
+
+CONF = Settings()
