@@ -3,7 +3,7 @@ Class for managing chain-link configuration variables.
 Code contributors: Koa Wells koa.wells@hotmail.com
 """
 from pathlib import Path
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import field_validator
 
 class Settings(BaseSettings):
@@ -13,12 +13,9 @@ class Settings(BaseSettings):
   DISCORD_TOKEN: str = ''
   EMAIL: str = ''
   EMAIL_PASSWORD: str = ''
+  RECIPIENTS_FILE: str = ''
 
-  class Config:
-    """
-    Required class by pydantic for loading the .config file
-    """
-    env_file = Path("./.config").resolve()
+  model_config = SettingsConfigDict(env_file=".config", env_file_encoding="utf-8")
 
   @field_validator("DISCORD_TOKEN")
   @classmethod
@@ -55,5 +52,20 @@ class Settings(BaseSettings):
     if not value:
       raise ValueError("EMAIL_PASSWORD must be set")
     return value
+
+  @field_validator("RECIPIENTS_FILE")
+  @classmethod
+  def check_recipients_file(cls, value: str) -> Path:
+    """
+    Checks to see if RECIPIENTS_FILE environment variable is set.
+    :param value: value of RECIPIENTS_FILE
+    :return: Path
+    """
+    if not value:
+      raise ValueError("RECIPIENTS_FILE must be set")
+    recipients_file_path = Path(__file__).parent / 'data' / value
+    if not recipients_file_path.exists():
+      raise ValueError("RECIPIENTS_FILE does not exist")
+    return recipients_file_path
 
 CONF = Settings()
