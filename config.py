@@ -14,10 +14,12 @@ class Settings(BaseSettings):
   EMAIL: str = ''
   EMAIL_PASSWORD: str = ''
   RECIPIENTS_FILE: str = ''
+  SMTP_SERVER: str = ''
+  SMTP_PORT: int = 465
 
-  model_config = SettingsConfigDict(env_file=".config", env_file_encoding="utf-8")
+  model_config = SettingsConfigDict(env_file='.config', env_file_encoding='utf-8')
 
-  @field_validator("DISCORD_TOKEN")
+  @field_validator('DISCORD_TOKEN')
   @classmethod
   def check_discord_token(cls, value: str) -> str:
     """
@@ -26,10 +28,10 @@ class Settings(BaseSettings):
     :return: str
     """
     if not value:
-      raise ValueError("DISCORD_TOKEN must be set")
+      raise ValueError('DISCORD_TOKEN must be set')
     return value
 
-  @field_validator("EMAIL")
+  @field_validator('EMAIL')
   @classmethod
   def check_email(cls, value: str) -> str:
     """
@@ -38,10 +40,10 @@ class Settings(BaseSettings):
     :return: str
     """
     if not value:
-      raise ValueError("EMAIL must be set")
+      raise ValueError('EMAIL must be set')
     return value
 
-  @field_validator("EMAIL_PASSWORD")
+  @field_validator('EMAIL_PASSWORD')
   @classmethod
   def check_email_password(cls, value: str) -> str:
     """
@@ -50,10 +52,29 @@ class Settings(BaseSettings):
     :return: str
     """
     if not value:
-      raise ValueError("EMAIL_PASSWORD must be set")
+      raise ValueError('EMAIL_PASSWORD must be set')
     return value
 
-  @field_validator("RECIPIENTS_FILE")
+  @field_validator('SMTP_SERVER')
+  @classmethod
+  def check_smtp_server(cls, value: str) -> str:
+    """
+    Checks to see if the SMTP_SERVER environment variable is set.
+    :param value: value of SMTP_SERVER
+    :return: str
+    """
+    if not value:
+      raise ValueError('SMTP_SERVER must be set')
+    return value
+
+  @field_validator('SMTP_PORT')
+  @classmethod
+  def check_smtp_port(cls, value: int) -> int:
+    if not value:
+      raise ValueError('SMTP_PORT must be set')
+    return value
+
+  @field_validator('RECIPIENTS_FILE')
   @classmethod
   def check_recipients_file(cls, value: str) -> Path:
     """
@@ -62,10 +83,10 @@ class Settings(BaseSettings):
     :return: Path
     """
     if not value:
-      raise ValueError("RECIPIENTS_FILE must be set")
+      raise ValueError('RECIPIENTS_FILE must be set')
     recipients_file_path = Path(__file__).parent / 'data' / value
     if not recipients_file_path.exists():
-      raise ValueError("RECIPIENTS_FILE does not exist")
+      raise ValueError('RECIPIENTS_FILE does not exist')
     return recipients_file_path
 
 CONF = Settings()
