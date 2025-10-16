@@ -13,9 +13,9 @@ class Settings(BaseSettings):
   DISCORD_TOKEN: str = ''
   EMAIL: str = ''
   EMAIL_PASSWORD: str = ''
-  RECIPIENTS_FILE: str = ''
   SMTP_SERVER: str = ''
   SMTP_PORT: int = 465
+  RECIPIENTS_FILE: str = ''
 
   model_config = SettingsConfigDict(env_file='.config', env_file_encoding='utf-8')
 
